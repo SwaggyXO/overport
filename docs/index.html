@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Overport, JSON over HTML portals</title>
+  <meta name="description" content="Overport puts a stable JSON API in front of websites that only speak HTML. LinkedIn profiles and a toy payer portal, same idea." />
+  <link rel="stylesheet" href="assets/site.css" />
+</head>
+<body>
+  <header class="hero">
+    <p class="kicker">Overport</p>
+    <h1>The website is the system of record. The product still needs JSON.</h1>
+    <p class="lede">
+      Clinics, payers, and a lot of the ordinary internet already have working sites.
+      They do not have a usable API. Overport sits in the middle: a small FastAPI service
+      that logs in, follows a known sequence of HTTP hops, and maps what the page actually
+      showed into a versioned schema. If a field is not on the page, it is omitted.
+      It is not filled in as zero, not guessed from a nearby card, not invented from a CSS class.
+    </p>
+    <p class="links">
+      <a href="https://github.com/SwaggyXO/overport">Source on GitHub</a>
+      <a id="live-api-link" href="./">Live API</a>
+      <a href="#try">Try a claim</a>
+    </p>
+  </header>
+
+  <main>
+    <section>
+      <h2>The idea</h2>
+      <p>
+        Healthcare software wants structured claims, eligibility, notes, and charts.
+        The source of truth is often a logged-in HTML app that was never designed for
+        another program to read. That gap is the whole product category: wrap the portal,
+        give the rest of the stack JSON it can trust.
+      </p>
+      <p>
+        LinkedIn is the same shape of problem on a public site. There is a profile page.
+        There is a session. There is no official profile JSON for a third party to call.
+        The production path here is not a headless browser clicking around. Capture once,
+        then replay the hops with HTTP. The mapper walks React Server Component text and
+        keeps the human copy: name, headline, about, jobs, school, skills.
+      </p>
+      <p>
+        The extra connector is a toy payer portal that only speaks HTML. Login is a form.
+        A claim is a table. A note is another form. The customer API is
+        <code>GET /v1/claims/{id}</code> and <code>POST /v1/notes</code>. Same job, on a site we own,
+        so the live demo does not depend on anyone else's session.
+      </p>
+    </section>
+
+    <section>
+      <h2>Architecture</h2>
+      <p>
+        Two connectors, one result type. Each hop records method, status, and byte size.
+        Cookie values and response bodies stay out of the customer payload.
+      </p>
+      <figure>
+        <img src="assets/architecture.svg" alt="Customer JSON client to Overport to LinkedIn or the toy HTML portal" />
+        <figcaption>Overport is the seam. Upstream stays HTML. Downstream stays JSON.</figcaption>
+      </figure>
+      <p>
+        The LinkedIn path is eight hops: a public profile GET, a flagship-web GET, then six
+        component POSTs for about, experience, education, skills, certifications, and languages.
+        They are spaced 2.5 seconds apart, about four profiles a minute. Feed and people-you-may-know
+        traffic is not replayed.
+      </p>
+      <p>
+        The portal path is shorter: POST login, GET the claim page, parse the table.
+        For a note, POST the HTML form after the same login.
+      </p>
+    </section>
+
+    <section>
+      <h2>User journeys</h2>
+      <h3>A billing tool asks for a claim</h3>
+      <figure>
+        <img src="assets/journey-claim.svg" alt="GET claim, login, scrape table, return JSON" />
+        <figcaption>CLM-1001 has a billed amount. CLM-1002 does not. The JSON for 1002 has null billed_cents and a billed_cents_missing warning, never 0.</figcaption>
+      </figure>
+      <ol>
+        <li>The tool calls <code>GET /v1/claims/CLM-1001</code>.</li>
+        <li>Overport posts the clerk login to <code>/legacy/login</code> and keeps the session cookie.</li>
+        <li>It GETs <code>/legacy/claims/CLM-1001</code>, which is an HTML table, not JSON.</li>
+        <li>The parser reads labeled cells. Status, initials, as-of date, billed amount if the row exists.</li>
+        <li>The tool receives a <code>ClaimResponse</code>. <code>meta.hops</code> shows what happened, without bodies.</li>
+      </ol>
+
+      <h3>A product asks for a LinkedIn profile</h3>
+      <figure>
+        <img src="assets/journey-profile.svg" alt="Vanity name, eight LinkedIn hops, mapped profile JSON" />
+        <figcaption>The mapper drops Featured posts, On-site workplace type, skill summaries, and React leftovers. Those become warnings, not fields.</figcaption>
+      </figure>
+      <ol>
+        <li>The product sends a vanity name or a <code>/in/...</code> URL.</li>
+        <li>Overport replays the known flagship-web hops with the configured session.</li>
+        <li>RSC payloads are walked for visible text, including nested React children in About.</li>
+        <li>The product gets a versioned profile. Empty certs or languages stay empty and marked unavailable.</li>
+      </ol>
+      <p>
+        The hosted demo does not attach a LinkedIn session. Profile calls return 401 until you
+        run the service locally with your own cookies. The portal journeys work on the live API
+        with no extra setup.
+      </p>
+    </section>
+
+    <section>
+      <h2>What the portal looks like</h2>
+      <p>
+        This is on purpose. The upstream is meant to look like an internal clerk screen from 2004:
+        gray background, default fonts, a table, a form. The JSON on the other side is the point.
+      </p>
+      <div class="shots">
+        <figure>
+          <img src="assets/portal-login.png" alt="Toy portal login page with User, Pass, and Sign in" />
+          <figcaption>Login. The clerk posts a form. There is no JSON endpoint.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/portal-claim-paid.png" alt="Claim status HTML table for CLM-1001 with billed 1250.00" />
+          <figcaption>CLM-1001. Paid, billed 1250.00, initials only.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/portal-claim-pending.png" alt="Claim status HTML table for CLM-1002 with no billed row" />
+          <figcaption>CLM-1002. Pending. There is no Billed row at all.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/portal-notes.png" alt="Clinical note HTML form with claim and note fields" />
+          <figcaption>Notes. Empty text is rejected. Unknown claim ids 404.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section>
+      <h2>What the customer sees</h2>
+      <div class="shots">
+        <figure>
+          <img src="assets/openapi.png" alt="Overport OpenAPI page listing health, profiles, claims, notes, and the HTML portal routes" />
+          <figcaption>OpenAPI at <code>/docs</code>. The HTML portal routes are listed so the wrap is obvious.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/api-claim-paid.png" alt="JSON response for paid claim CLM-1001" />
+          <figcaption>Paid claim as JSON. billed_cents is 125000. Login and claim_status hops are in meta.</figcaption>
+        </figure>
+        <figure>
+          <img src="assets/api-claim-pending.png" alt="JSON response for pending claim with billed_cents null and a warning" />
+          <figcaption>Pending claim. billed_cents is null. warnings includes billed_cents_missing.</figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <section id="try">
+      <h2>Try a claim</h2>
+      <p>
+        If you are on the live API, this calls it from the browser. On GitHub Pages it falls
+        back to the checked-in sample JSON when the API origin is not configured.
+      </p>
+      <p class="row">
+        <button type="button" id="btn-1001">GET CLM-1001</button>
+        <button type="button" id="btn-1002">GET CLM-1002</button>
+        <button type="button" id="btn-health">GET /health</button>
+      </p>
+      <pre id="out">Click a button.</pre>
+    </section>
+
+    <section>
+      <h2>Run it yourself</h2>
+      <pre class="code">git clone https://github.com/SwaggyXO/overport.git
+cd overport
+uv sync --extra dev
+uv run uvicorn app.main:app --host 127.0.0.1 --port 8000</pre>
+      <p>
+        Open <code>http://127.0.0.1:8000</code> for this site, <code>/docs</code> for OpenAPI,
+        <code>/legacy/login</code> for the ugly portal. Clerk user and password default to
+        <code>clerk</code> / <code>clerk</code>.
+      </p>
+      <p>
+        Profile fetches need a LinkedIn session in the environment. Without it, those routes
+        return 401. That is expected on the public deploy.
+      </p>
+    </section>
+
+    <section>
+      <h2>Limits</h2>
+      <ul>
+        <li>LinkedIn may treat automated access as a terms violation. This is a demonstration, not a scraping product.</li>
+        <li>Sessions expire. The mapper can only see what the session can see.</li>
+        <li>Placeholder cards (certs, languages) stay empty and are marked unavailable.</li>
+        <li>The toy portal is not an EHR, not FHIR, and not PHI. Initials only.</li>
+        <li>GitHub Pages hosts this document. The API process cannot run on Pages. The live service is a container.</li>
+      </ul>
+    </section>
+  </main>
+
+  <footer>
+    <p>Overport. MIT. <a href="https://github.com/SwaggyXO/overport">GitHub</a></p>
+  </footer>
+
+  <script src="config.js"></script>
+  <script src="assets/site.js"></script>
+</body>
+</html>

@@ -1,0 +1,119 @@
+:root {
+  --ink: #1c1915;
+  --muted: #5c564c;
+  --paper: #f4efe6;
+  --card: #fffdf8;
+  --line: #d9d0c3;
+  --accent: #9c3d16;
+}
+
+* { box-sizing: border-box; }
+
+html { scroll-behavior: smooth; }
+
+body {
+  margin: 0;
+  color: var(--ink);
+  background: var(--paper);
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.55;
+}
+
+.hero, main, footer {
+  max-width: 44rem;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.hero { padding-top: 3.5rem; padding-bottom: 1rem; }
+
+.kicker {
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--accent);
+  margin: 0 0 0.75rem;
+}
+
+h1, h2, h3 {
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+
+h1 { font-size: 2.25rem; margin: 0 0 1rem; }
+
+h2 { font-size: 1.5rem; margin: 2.75rem 0 0.75rem; }
+
+h3 { font-size: 1.15rem; margin: 1.75rem 0 0.5rem; }
+
+.lede { font-size: 1.2rem; }
+
+p, li { color: var(--ink); }
+
+.muted, figcaption { color: var(--muted); }
+
+a { color: var(--accent); }
+
+.links { display: flex; flex-wrap: wrap; gap: 1rem 1.5rem; }
+
+.links a { font-size: 1rem; }
+
+code {
+  font-family: "Cascadia Code", "Segoe UI Mono", ui-monospace, Consolas, monospace;
+  font-size: 0.9em;
+  background: var(--card);
+  padding: 0.05em 0.3em;
+  border: 1px solid var(--line);
+}
+
+pre, pre.code, #out {
+  font-family: "Cascadia Code", "Segoe UI Mono", ui-monospace, Consolas, monospace;
+  font-size: 0.85rem;
+  line-height: 1.45;
+  background: var(--card);
+  border: 1px solid var(--line);
+  padding: 1rem;
+  overflow: auto;
+}
+
+figure { margin: 1.25rem 0; }
+
+figure img {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+figcaption { font-size: 0.95rem; margin-top: 0.5rem; }
+
+.shots figure { margin-bottom: 1.75rem; }
+
+.row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+
+button {
+  font: inherit;
+  font-size: 1rem;
+  background: var(--ink);
+  color: var(--paper);
+  border: 0;
+  padding: 0.45rem 0.85rem;
+  cursor: pointer;
+}
+
+button:hover { background: var(--accent); }
+
+ul, ol { padding-left: 1.25rem; }
+
+footer {
+  padding: 3rem 1.25rem 4rem;
+  color: var(--muted);
+  font-size: 0.95rem;
+}
+
+@media (min-width: 960px) {
+  .hero, main, footer { max-width: 52rem; }
+}

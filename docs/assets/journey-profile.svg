@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 280" role="img" aria-labelledby="title desc">
+  <title id="title">Profile journey</title>
+  <desc id="desc">Customer sends a vanity name. Overport replays eight LinkedIn hops, walks React children, and emits a versioned profile. Junk text is dropped into warnings.</desc>
+  <rect width="920" height="280" fill="#f4efe6"/>
+  <g font-family="Georgia, serif" fill="#1c1915" font-size="13">
+    <rect x="24" y="88" width="160" height="74" fill="#fff" stroke="#1c1915"/>
+    <text x="104" y="132" text-anchor="middle">vanity or URL</text>
+    <path d="M184 125 H 228" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="228" y="88" width="200" height="74" fill="#fff" stroke="#1c1915"/>
+    <text x="328" y="122" text-anchor="middle">GET /in and</text>
+    <text x="328" y="142" text-anchor="middle">GET /flagship-web/in</text>
+    <path d="M428 125 H 472" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="472" y="88" width="200" height="74" fill="#fff" stroke="#1c1915"/>
+    <text x="572" y="122" text-anchor="middle">six component POSTs</text>
+    <text x="572" y="142" text-anchor="middle">about, jobs, school, ...</text>
+    <path d="M672 125 H 716" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="716" y="88" width="180" height="74" fill="#fff" stroke="#1c1915"/>
+    <text x="806" y="122" text-anchor="middle">ProfileResponse</text>
+    <text x="806" y="142" text-anchor="middle">+ warnings + hops</text>
+    <text x="460" y="220" text-anchor="middle" font-size="14">Featured posts, On-site, and CSS hashes are not location or about.</text>
+  </g>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="#1c1915"/>
+    </marker>
+  </defs>
+</svg>

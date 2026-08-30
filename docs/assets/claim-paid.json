@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "claim_id": "CLM-1001",
+  "status": "Paid",
+  "billed_cents": 125000,
+  "patient_initials": "J.D.",
+  "as_of": "2026-01-15",
+  "warnings": [],
+  "meta": {
+    "hops": [
+      { "name": "login", "method": "POST", "status": 200, "bytes": 150, "skipped": false },
+      { "name": "claim_status", "method": "GET", "status": 200, "bytes": 363, "skipped": false }
+    ]
+  }
+}

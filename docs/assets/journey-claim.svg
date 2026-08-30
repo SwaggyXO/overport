@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 280" role="img" aria-labelledby="title desc">
+  <title id="title">Claim journey</title>
+  <desc id="desc">Customer asks for a claim. Overport signs into the portal, reads the HTML table, and returns JSON. A missing billed amount stays missing.</desc>
+  <rect width="920" height="280" fill="#f4efe6"/>
+  <g font-family="Georgia, serif" fill="#1c1915" font-size="13">
+    <rect x="30" y="90" width="150" height="70" fill="#fff" stroke="#1c1915"/>
+    <text x="105" y="132" text-anchor="middle">GET /v1/claims</text>
+    <path d="M180 125 H 230" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="230" y="90" width="150" height="70" fill="#fff" stroke="#1c1915"/>
+    <text x="305" y="132" text-anchor="middle">POST /legacy/login</text>
+    <path d="M380 125 H 430" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="430" y="90" width="170" height="70" fill="#fff" stroke="#1c1915"/>
+    <text x="515" y="132" text-anchor="middle">GET /legacy/claims/id</text>
+    <path d="M600 125 H 650" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="650" y="90" width="240" height="70" fill="#fff" stroke="#1c1915"/>
+    <text x="770" y="122" text-anchor="middle">JSON: status, amount or</text>
+    <text x="770" y="142" text-anchor="middle">billed_cents_missing</text>
+    <text x="460" y="220" text-anchor="middle" font-size="14">The portal never sees JSON. The customer never sees HTML.</text>
+  </g>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="#1c1915"/>
+    </marker>
+  </defs>
+</svg>

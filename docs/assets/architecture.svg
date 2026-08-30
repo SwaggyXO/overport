@@ -1,0 +1,38 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 920 420" role="img" aria-labelledby="title desc">
+  <title id="title">Overport architecture</title>
+  <desc id="desc">A customer calls a JSON API. Overport logs into an HTML site, follows a known hop list, and maps the page into a versioned schema.</desc>
+  <rect width="920" height="420" fill="#f4efe6"/>
+  <g font-family="Georgia, serif" fill="#1c1915">
+    <rect x="40" y="160" width="160" height="88" fill="#fff" stroke="#1c1915" stroke-width="1.5"/>
+    <text x="120" y="198" text-anchor="middle" font-size="15">Your app</text>
+    <text x="120" y="220" text-anchor="middle" font-size="12" fill="#5c564c">JSON client</text>
+
+    <path d="M210 204 H 270" stroke="#1c1915" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <text x="240" y="190" text-anchor="middle" font-size="11" fill="#5c564c">/v1/...</text>
+
+    <rect x="280" y="120" width="220" height="168" fill="#fff" stroke="#1c1915" stroke-width="1.5"/>
+    <text x="390" y="150" text-anchor="middle" font-size="16">Overport</text>
+    <text x="390" y="178" text-anchor="middle" font-size="12">1. Replay hops</text>
+    <text x="390" y="200" text-anchor="middle" font-size="12">2. Parse HTML or RSC</text>
+    <text x="390" y="222" text-anchor="middle" font-size="12">3. Map to schema</text>
+    <text x="390" y="252" text-anchor="middle" font-size="11" fill="#5c564c">warnings, not guesses</text>
+
+    <path d="M500 180 H 560" stroke="#1c1915" stroke-width="1.5" marker-end="url(#arrow)"/>
+    <path d="M500 228 H 560" stroke="#1c1915" stroke-width="1.5" marker-end="url(#arrow)"/>
+
+    <rect x="570" y="70" width="310" height="120" fill="#fff" stroke="#1c1915" stroke-width="1.5"/>
+    <text x="725" y="104" text-anchor="middle" font-size="15">LinkedIn (flagship-web)</text>
+    <text x="725" y="130" text-anchor="middle" font-size="12" fill="#5c564c">2 GETs + 6 component POSTs</text>
+    <text x="725" y="154" text-anchor="middle" font-size="12" fill="#5c564c">session cookies, no browser</text>
+
+    <rect x="570" y="230" width="310" height="120" fill="#fff" stroke="#1c1915" stroke-width="1.5"/>
+    <text x="725" y="264" text-anchor="middle" font-size="15">Toy HTML payer portal</text>
+    <text x="725" y="290" text-anchor="middle" font-size="12" fill="#5c564c">login form, claim table, notes POST</text>
+    <text x="725" y="314" text-anchor="middle" font-size="12" fill="#5c564c">the site only returns HTML</text>
+  </g>
+  <defs>
+    <marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="#1c1915"/>
+    </marker>
+  </defs>
+</svg>

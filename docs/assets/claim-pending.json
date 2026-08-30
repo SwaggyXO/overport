@@ -1,0 +1,15 @@
+{
+  "schema_version": "1.0",
+  "claim_id": "CLM-1002",
+  "status": "Pending",
+  "billed_cents": null,
+  "patient_initials": "J.D.",
+  "as_of": "2026-02-01",
+  "warnings": ["billed_cents_missing"],
+  "meta": {
+    "hops": [
+      { "name": "login", "method": "POST", "status": 200, "bytes": 150, "skipped": false },
+      { "name": "claim_status", "method": "GET", "status": 200, "bytes": 326, "skipped": false }
+    ]
+  }
+}
