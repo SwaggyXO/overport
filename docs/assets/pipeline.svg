@@ -1,0 +1,31 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 960 220" role="img" aria-labelledby="title desc">
+  <title id="title">LinkedIn discovery pipeline</title>
+  <desc id="desc">Dummy Chromium, HAR and cookies, reverse-engineered hops, browserless replay, then the public JSON API.</desc>
+  <rect width="960" height="220" fill="#f4efe6"/>
+  <g font-family="Georgia, serif" fill="#1c1915" font-size="13">
+    <rect x="16" y="50" width="160" height="90" fill="#fff" stroke="#1c1915"/>
+    <text x="96" y="88" text-anchor="middle">Dummy Chromium</text>
+    <text x="96" y="110" text-anchor="middle" fill="#5c564c">isolated profile</text>
+    <path d="M176 95 H 214" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="214" y="50" width="160" height="90" fill="#fff" stroke="#1c1915"/>
+    <text x="294" y="88" text-anchor="middle">HAR + cookies</text>
+    <text x="294" y="110" text-anchor="middle" fill="#5c564c">local only</text>
+    <path d="M374 95 H 412" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="412" y="50" width="170" height="90" fill="#fff" stroke="#1c1915"/>
+    <text x="497" y="88" text-anchor="middle">Read the hops</text>
+    <text x="497" y="110" text-anchor="middle" fill="#5c564c">flagship-web RSC</text>
+    <path d="M582 95 H 620" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="620" y="50" width="150" height="90" fill="#fff" stroke="#1c1915"/>
+    <text x="695" y="88" text-anchor="middle">Replay httpx</text>
+    <text x="695" y="110" text-anchor="middle" fill="#5c564c">no browser</text>
+    <path d="M770 95 H 808" stroke="#1c1915" marker-end="url(#a)"/>
+    <rect x="808" y="50" width="136" height="90" fill="#fff" stroke="#1c1915"/>
+    <text x="876" y="88" text-anchor="middle">OpenAPI</text>
+    <text x="876" y="110" text-anchor="middle" fill="#5c564c">GET /v1/profiles</text>
+  </g>
+  <defs>
+    <marker id="a" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+      <path d="M0,0 L8,4 L0,8" fill="#1c1915"/>
+    </marker>
+  </defs>
+</svg>

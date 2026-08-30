@@ -10,6 +10,7 @@
 <body>
   <nav class="topnav">
     <div class="topnav-inner">
+      <a href="#pipeline">How we built it</a>
       <a href="#try-linkedin">Try LinkedIn</a>
       <a href="#try">Try a claim</a>
       <a id="nav-docs" href="/docs">OpenAPI</a>
@@ -29,6 +30,7 @@
       It is not filled in as zero, not guessed from a nearby card, not invented from a CSS class.
     </p>
     <p class="links">
+      <a href="#pipeline">Dummy browser to OpenAPI</a>
       <a href="#try-linkedin">Try a profile fetch</a>
       <a href="#try">Try a claim</a>
       <a id="live-api-link" href="/docs">OpenAPI on the live API</a>
@@ -36,6 +38,79 @@
   </header>
 
   <main>
+    <section id="pipeline">
+      <h2>How the LinkedIn API was found</h2>
+      <p>
+        LinkedIn does not hand you profile JSON. The live <code>/v1/profiles</code> route, and the
+        OpenAPI page that documents it, came from a local lab: a dummy account in an isolated
+        Chromium profile, HAR captures of the logged-in Network tab, session cookies kept on disk
+        only, then a browserless replay of the hops that actually carried profile data.
+      </p>
+      <figure>
+        <img src="assets/pipeline.svg" alt="Dummy Chromium, to HAR and cookies, to reverse-engineered hops, to httpx replay, to OpenAPI" />
+        <figcaption>Discover once. Replay forever. Production never opens a browser.</figcaption>
+      </figure>
+      <ol>
+        <li>
+          <strong>Isolated Chromium.</strong> A throwaway browser profile, dummy LinkedIn account
+          only. Not a personal login. Not Playwright in this repo: DevTools on that Chromium window.
+        </li>
+        <li>
+          <strong>HAR with content.</strong> Fetch/XHR while opening a profile. That file showed
+          which calls were the shell and which were the about / experience / education / skills
+          cards. Feed, people-you-may-know, and ads were in the log and were left on the floor.
+        </li>
+        <li>
+          <strong>Cookies, locally.</strong> <code>li_at</code> and <code>JSESSIONID</code> from that
+          session went into a local env file. They were never committed. The public Cloud Run
+          service does not have them, which is why hosted profile calls return 401.
+        </li>
+        <li>
+          <strong>Reverse-engineer the path.</strong> The useful traffic was not classic Voyager
+          REST. It was flagship-web RSC: a skip-redirect GET, a flagship profile GET, then six
+          <code>POST /flagship-web/rsc-action/actions/component</code> card fetches.
+        </li>
+        <li>
+          <strong>Replay with httpx, map the text.</strong> Nested React children for About, reject
+          Featured posts and On-site as location, keep year spans as education dates. The customer
+          payload is that schema plus <code>warnings</code> and <code>meta.hops</code>.
+        </li>
+      </ol>
+      <p>
+        HAR files and the Chromium profile directory stay on the machine that captured them.
+        What shipped is the hop list, the mapper, the tests against synthetic RSC, and the
+        <a id="docs-from-pipeline" href="/docs">OpenAPI</a>
+        that Tross can click.
+      </p>
+
+      <h3>Artifacts from that lab</h3>
+      <p>The production hop list, copied out of the HAR (paths only, no cookies, no query secrets):</p>
+      <table class="hops">
+        <thead>
+          <tr><th>Hop</th><th>Method</th><th>What it is</th></tr>
+        </thead>
+        <tbody>
+          <tr><td><code>skip_redirect</code></td><td>GET</td><td><code>/in/{vanity}/?skipRedirect=true</code></td></tr>
+          <tr><td><code>flagship_shell</code></td><td>GET</td><td><code>/flagship-web/in/{vanity}/</code></td></tr>
+          <tr><td><code>about</code></td><td>POST</td><td>component <code>profileCardsAboveActivity</code></td></tr>
+          <tr><td><code>experience</code></td><td>POST</td><td>component <code>profileCardsExperienceOnly</code></td></tr>
+          <tr><td><code>education</code></td><td>POST</td><td>component <code>Part1WithoutExp</code></td></tr>
+          <tr><td><code>skills</code></td><td>POST</td><td>component <code>Part7</code></td></tr>
+          <tr><td><code>certs</code></td><td>POST</td><td>component <code>Part3</code> (often a placeholder)</td></tr>
+          <tr><td><code>languages</code></td><td>POST</td><td>component <code>Part4</code> (often a placeholder)</td></tr>
+        </tbody>
+      </table>
+      <p>Spacing is 2.5 seconds between hops, about four profiles a minute. Each hop shows up on the JSON as method, status, and bytes. Bodies and cookies do not.</p>
+      <p>Mapper leftovers we treated as junk, not fields:</p>
+      <ul>
+        <li>Featured posts and <code>N reactions · N comments</code> are not About.</li>
+        <li><code>On-site</code> / Remote / Hybrid are not a city.</li>
+        <li>Skill chips and <code>+7 skills</code> are not a company name.</li>
+        <li>CSS hashes, <code>$L1</code>, <code>div</code> are not copy.</li>
+        <li>A missing certs or languages card stays empty and <code>sections_available</code> says so.</li>
+      </ul>
+    </section>
+
     <section id="try-linkedin">
       <h2>Try LinkedIn</h2>
       <p>

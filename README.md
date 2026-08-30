@@ -31,6 +31,20 @@ Two rules, both boring and both load-bearing:
 1. Replay only what you discovered. Do not drag in feed, ads, or people-you-may-know.
 2. Map only what you can defend. Featured posts are not location. `On-site` is not a city. A missing billed amount is a warning, not a zero.
 
+## How the LinkedIn connector was found
+
+This is the assigned problem. The OpenAPI you see on the live service is the end of a local lab, not a guessed URL list.
+
+![Dummy Chromium to HAR to reverse-engineered hops to httpx to OpenAPI](docs/assets/pipeline.svg)
+
+1. Isolated Chromium, dummy LinkedIn account only. Not a personal login. DevTools on that window (this repo does not drive Playwright).
+2. HAR with content while a profile loaded. Fetch/XHR only. Feed and people-you-may-know were in the capture and were not replayed.
+3. `li_at` and `JSESSIONID` from that session, local env only. Never committed. The public container does not have them, so hosted `GET /v1/profiles` is 401.
+4. The useful traffic was flagship-web RSC: `GET /in/{vanity}/?skipRedirect=true`, `GET /flagship-web/in/{vanity}/`, then six `POST .../component` cards (about, experience, education, skills, certs, languages).
+5. Replay those eight hops with httpx. Map visible copy. Reject Featured, On-site, skill chips, `$L1`. That mapper is what `/v1/profiles` runs.
+
+HAR files and the Chromium profile stay on the capture machine. What shipped is the hop list, the mapper, synthetic RSC tests, and the live OpenAPI.
+
 ## Architecture
 
 ```mermaid

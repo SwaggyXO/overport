@@ -34,6 +34,25 @@ body {
   padding: 0 1.25rem;
 }
 
+table.hops {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  background: var(--card);
+  border: 1px solid var(--line);
+}
+
+table.hops th, table.hops td {
+  text-align: left;
+  padding: 0.45rem 0.6rem;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+
+table.hops th {
+  font-weight: 600;
+}
+
 .topnav-inner {
   display: flex;
   flex-wrap: wrap;

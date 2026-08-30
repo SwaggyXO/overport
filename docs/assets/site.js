@@ -18,6 +18,7 @@
   wire("nav-docs", "/docs");
   wire("nav-portal", "/legacy/login");
   wire("nav-health", "/health");
+  wire("docs-from-pipeline", "/docs");
   wire("docs-profiles", "/docs#/profiles/get_profile_v1_profiles_get");
   wire("portal-link", "/legacy/login");
 
