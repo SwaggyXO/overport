@@ -8,6 +8,16 @@
   <link rel="stylesheet" href="assets/site.css" />
 </head>
 <body>
+  <nav class="topnav">
+    <div class="topnav-inner">
+      <a href="#try-linkedin">Try LinkedIn</a>
+      <a href="#try">Try a claim</a>
+      <a id="nav-docs" href="/docs">OpenAPI</a>
+      <a id="nav-portal" href="/legacy/login">HTML portal</a>
+      <a id="nav-health" href="/health">Health</a>
+      <a href="https://github.com/SwaggyXO/overport">Source</a>
+    </div>
+  </nav>
   <header class="hero">
     <p class="kicker">Overport</p>
     <h1>The website is the system of record. The product still needs JSON.</h1>
@@ -19,13 +29,56 @@
       It is not filled in as zero, not guessed from a nearby card, not invented from a CSS class.
     </p>
     <p class="links">
-      <a href="https://github.com/SwaggyXO/overport">Source on GitHub</a>
-      <a id="live-api-link" href="./">Live API</a>
+      <a href="#try-linkedin">Try a profile fetch</a>
       <a href="#try">Try a claim</a>
+      <a id="live-api-link" href="/docs">OpenAPI on the live API</a>
     </p>
   </header>
 
   <main>
+    <section id="try-linkedin">
+      <h2>Try LinkedIn</h2>
+      <p>
+        This is the assigned problem: a profile URL in, versioned JSON out, no browser in production.
+        Eight hops (two GETs plus six card POSTs), 2.5 seconds apart, mapper that keeps About prose and
+        drops Featured posts, On-site, skill chips, and RSC leftovers into <code>warnings</code>.
+      </p>
+      <p>
+        Hit the live service from this page. The public container does not hold LinkedIn cookies, so
+        you should see <code>401 linkedin_not_configured</code>. That is the honest hosted result.
+        A mapped profile (from the offline fixtures) is under the buttons so you can see the schema.
+        For a live 200, run the API locally with a dummy-account session and call the same route,
+        or use Try it out on
+        <a id="docs-profiles" href="/docs#/profiles/get_profile_v1_profiles_get">OpenAPI /v1/profiles</a>.
+      </p>
+      <label for="vanity">Vanity name or /in/ URL</label>
+      <input id="vanity" type="text" value="jane-doe" autocomplete="off" />
+      <p class="row">
+        <button type="button" id="btn-profile">GET /v1/profiles</button>
+        <button type="button" id="btn-profile-sample" class="secondary">Show mapped sample</button>
+      </p>
+      <p class="status-line" id="status-profile"></p>
+      <pre id="out-profile">Click GET /v1/profiles to call the live API.</pre>
+    </section>
+
+    <section id="try">
+      <h2>Try a claim</h2>
+      <p>
+        Same wrapping job on a toy HTML portal we own, so this path is live without anyone else's
+        session. These buttons call Cloud Run, not the checked-in samples.
+        Clerk login is <code>clerk</code> / <code>clerk</code> if you open the
+        <a id="portal-link" href="/legacy/login">ugly HTML portal</a> yourself.
+      </p>
+      <p class="row">
+        <button type="button" id="btn-1001">GET CLM-1001</button>
+        <button type="button" id="btn-1002">GET CLM-1002</button>
+        <button type="button" id="btn-note">POST a note</button>
+        <button type="button" id="btn-health">GET /health</button>
+      </p>
+      <p class="status-line" id="status-claim"></p>
+      <pre id="out-claim">Click a button. This hits the live API.</pre>
+    </section>
+
     <section>
       <h2>The idea</h2>
       <p>
@@ -176,20 +229,6 @@
       </div>
     </section>
 
-    <section id="try">
-      <h2>Try a claim</h2>
-      <p>
-        If you are on the live API, this calls it from the browser. On GitHub Pages it falls
-        back to the checked-in sample JSON when the API origin is not configured.
-      </p>
-      <p class="row">
-        <button type="button" id="btn-1001">GET CLM-1001</button>
-        <button type="button" id="btn-1002">GET CLM-1002</button>
-        <button type="button" id="btn-health">GET /health</button>
-      </p>
-      <pre id="out">Click a button.</pre>
-    </section>
-
     <section>
       <h2>Run it yourself</h2>
       <pre class="code">git clone https://github.com/SwaggyXO/overport.git
@@ -203,7 +242,8 @@ uv run uvicorn app.main:app --host 127.0.0.1 --port 8000</pre>
       </p>
       <p>
         Profile fetches need a LinkedIn session in the environment. Without it, those routes
-        return 401. That is expected on the public deploy.
+        return 401. That is expected on the public deploy. Locally, the same
+        <code>GET /v1/profiles?vanity=...</code> used above returns a mapped profile.
       </p>
     </section>
 

@@ -20,13 +20,30 @@ body {
   line-height: 1.55;
 }
 
-.hero, main, footer {
+.topnav {
+  position: sticky;
+  top: 0;
+  z-index: 2;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+
+.topnav-inner, .hero, main, footer {
   max-width: 44rem;
   margin: 0 auto;
   padding: 0 1.25rem;
 }
 
-.hero { padding-top: 3.5rem; padding-bottom: 1rem; }
+.topnav-inner {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem 1.25rem;
+  padding-top: 0.75rem;
+  padding-bottom: 0.75rem;
+  font-size: 0.95rem;
+}
+
+.hero { padding-top: 2.5rem; padding-bottom: 1rem; }
 
 .kicker {
   letter-spacing: 0.14em;
@@ -60,6 +77,18 @@ a { color: var(--accent); }
 
 .links a { font-size: 1rem; }
 
+label { display: block; margin: 0.75rem 0 0.35rem; font-size: 1rem; }
+
+input[type="text"] {
+  font: inherit;
+  width: 100%;
+  max-width: 32rem;
+  padding: 0.4rem 0.55rem;
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+}
+
 code {
   font-family: "Cascadia Code", "Segoe UI Mono", ui-monospace, Consolas, monospace;
   font-size: 0.9em;
@@ -68,7 +97,7 @@ code {
   border: 1px solid var(--line);
 }
 
-pre, pre.code, #out {
+pre, pre.code, #out-claim, #out-profile {
   font-family: "Cascadia Code", "Segoe UI Mono", ui-monospace, Consolas, monospace;
   font-size: 0.85rem;
   line-height: 1.45;
@@ -94,7 +123,7 @@ figcaption { font-size: 0.95rem; margin-top: 0.5rem; }
 
 .shots figure { margin-bottom: 1.75rem; }
 
-.row { display: flex; flex-wrap: wrap; gap: 0.6rem; }
+.row { display: flex; flex-wrap: wrap; gap: 0.6rem; align-items: center; }
 
 button {
   font: inherit;
@@ -108,6 +137,20 @@ button {
 
 button:hover { background: var(--accent); }
 
+button.secondary {
+  background: transparent;
+  color: var(--ink);
+  border: 1px solid var(--ink);
+}
+
+button.secondary:hover {
+  background: var(--accent);
+  color: var(--paper);
+  border-color: var(--accent);
+}
+
+.status-line { font-size: 0.95rem; color: var(--muted); margin: 0.5rem 0 0; }
+
 ul, ol { padding-left: 1.25rem; }
 
 footer {
@@ -117,5 +160,5 @@ footer {
 }
 
 @media (min-width: 960px) {
-  .hero, main, footer { max-width: 52rem; }
+  .topnav-inner, .hero, main, footer { max-width: 52rem; }
 }

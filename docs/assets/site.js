@@ -1,77 +1,90 @@
 (function () {
-  const out = document.getElementById("out");
-  const live = document.getElementById("live-api-link");
   const api = (window.OVERPORT_API || "").replace(/\/$/, "");
-  const onAppHost =
-    location.port === "8000" ||
-    location.port === "8080" ||
-    location.port === "8085" ||
-    Boolean(api);
 
-  if (api) {
-    live.href = api + "/docs";
-    live.textContent = "Live API";
-  } else if (onAppHost && !location.pathname.includes("overport")) {
-    live.href = "/docs";
-  } else {
-    live.href = "https://github.com/SwaggyXO/overport";
-    live.textContent = "API source";
-  }
-
-  function origin() {
+  function base() {
     if (api) return api;
-    if (onAppHost && !location.hostname.includes("github.io")) return "";
-    return null;
+    if (location.hostname === "127.0.0.1" || location.hostname === "localhost") {
+      return "";
+    }
+    return "";
   }
 
-  async function show(label, runner) {
-    out.textContent = "Loading " + label + " ...";
-    try {
-      const text = await runner();
-      out.textContent = text;
-    } catch (err) {
-      out.textContent = String(err);
-    }
+  const root = base();
+  function wire(id, path) {
+    const el = document.getElementById(id);
+    if (el && root) el.href = root + path;
   }
+  wire("live-api-link", "/docs");
+  wire("nav-docs", "/docs");
+  wire("nav-portal", "/legacy/login");
+  wire("nav-health", "/health");
+  wire("docs-profiles", "/docs#/profiles/get_profile_v1_profiles_get");
+  wire("portal-link", "/legacy/login");
 
-  async function getJson(path, fallback) {
-    const base = origin();
-    if (base === null) {
-      const sample = await fetch(fallback);
-      const body = await sample.text();
-      return body + "\n\n(static sample from this site; set OVERPORT_API for live calls)";
-    }
-    const response = await fetch(base + path);
-    const body = await response.text();
+  async function pretty(path, options) {
+    const response = await fetch(root + path, options);
+    const raw = await response.text();
+    let body = raw;
     try {
-      return JSON.stringify(JSON.parse(body), null, 2);
+      body = JSON.stringify(JSON.parse(raw), null, 2);
     } catch (_) {
-      return body;
+      /* keep raw */
     }
+    return { status: response.status, body: body };
   }
 
-  document.getElementById("btn-1001").onclick = function () {
-    show("CLM-1001", function () {
-      return getJson("/v1/claims/CLM-1001", "assets/claim-paid.json");
-    });
-  };
-  document.getElementById("btn-1002").onclick = function () {
-    show("CLM-1002", function () {
-      return getJson("/v1/claims/CLM-1002", "assets/claim-pending.json");
-    });
-  };
-  document.getElementById("btn-health").onclick = function () {
-    show("health", async function () {
-      const base = origin();
-      if (base === null) {
-        return JSON.stringify(
-          { service: "overport", status: "ok", linkedin_session_present: false },
-          null,
-          2
-        );
+  function bind(buttonId, statusId, outId, runner) {
+    const button = document.getElementById(buttonId);
+    const status = document.getElementById(statusId);
+    const out = document.getElementById(outId);
+    if (!button) return;
+    button.onclick = async function () {
+      status.textContent = "Calling " + root + " ...";
+      out.textContent = "Loading...";
+      try {
+        const result = await runner();
+        status.textContent = "HTTP " + result.status + " from " + root;
+        out.textContent = result.body;
+      } catch (err) {
+        status.textContent = "Request failed";
+        out.textContent = String(err);
       }
-      const response = await fetch(base + "/health");
-      return JSON.stringify(await response.json(), null, 2);
+    };
+  }
+
+  bind("btn-1001", "status-claim", "out-claim", function () {
+    return pretty("/v1/claims/CLM-1001");
+  });
+  bind("btn-1002", "status-claim", "out-claim", function () {
+    return pretty("/v1/claims/CLM-1002");
+  });
+  bind("btn-health", "status-claim", "out-claim", function () {
+    return pretty("/health");
+  });
+  bind("btn-note", "status-claim", "out-claim", function () {
+    return pretty("/v1/notes", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ claim_id: "CLM-1001", text: "Note from the public demo." }),
     });
-  };
+  });
+  bind("btn-profile", "status-profile", "out-profile", function () {
+    const raw = (document.getElementById("vanity").value || "jane-doe").trim();
+    const looksLikeUrl = raw.indexOf("linkedin.com") !== -1 || raw.indexOf("http") === 0;
+    if (looksLikeUrl) {
+      return pretty("/v1/profiles?url=" + encodeURIComponent(raw));
+    }
+    return pretty("/v1/profiles?vanity=" + encodeURIComponent(raw));
+  });
+
+  const sampleBtn = document.getElementById("btn-profile-sample");
+  if (sampleBtn) {
+    sampleBtn.onclick = async function () {
+      document.getElementById("status-profile").textContent =
+        "Offline mapped sample (not a live LinkedIn fetch)";
+      const response = await fetch("assets/profile-sample.json");
+      const body = JSON.stringify(await response.json(), null, 2);
+      document.getElementById("out-profile").textContent = body;
+    };
+  }
 })();

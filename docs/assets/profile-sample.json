@@ -1,0 +1,58 @@
+{
+  "schema_version": "1.0",
+  "input": "https://www.linkedin.com/in/ada-lovelace/",
+  "vanity_name": "ada-lovelace",
+  "linkedin_url": "https://www.linkedin.com/in/ada-lovelace/",
+  "profile": {
+    "first_name": "Ada",
+    "last_name": "Lovelace",
+    "full_name": "Ada Lovelace",
+    "headline": "Mathematician and analyst",
+    "location": "London, England, United Kingdom",
+    "about": "Notes on the Analytical Engine, and a working mapper that keeps prose instead of CSS hashes."
+  },
+  "experience": [
+    {
+      "title": "Analyst",
+      "company": "Analytical Engine",
+      "location": "London, England, United Kingdom",
+      "start_date": "1842",
+      "end_date": null,
+      "is_current": true
+    }
+  ],
+  "education": [
+    {
+      "school": "Home study",
+      "degree": null,
+      "field": "Mathematics",
+      "start_date": "1833",
+      "end_date": "1843"
+    }
+  ],
+  "skills": [{ "name": "Mathematics", "endorsement_count": null }],
+  "certifications": [],
+  "languages": [],
+  "sections_available": {
+    "profile": true,
+    "about": true,
+    "experience": true,
+    "education": true,
+    "skills": true,
+    "certifications": false,
+    "languages": false
+  },
+  "warnings": ["certifications_placeholder", "languages_placeholder"],
+  "meta": {
+    "hops": [
+      { "name": "skip_redirect", "method": "GET", "status": 200, "bytes": 12000, "skipped": false },
+      { "name": "flagship_shell", "method": "GET", "status": 200, "bytes": 48000, "skipped": false },
+      { "name": "about", "method": "POST", "status": 200, "bytes": 8000, "skipped": false },
+      { "name": "experience", "method": "POST", "status": 200, "bytes": 9000, "skipped": false },
+      { "name": "education", "method": "POST", "status": 200, "bytes": 4000, "skipped": false },
+      { "name": "skills", "method": "POST", "status": 200, "bytes": 3000, "skipped": false },
+      { "name": "certs", "method": "POST", "status": 200, "bytes": 800, "skipped": true },
+      { "name": "languages", "method": "POST", "status": 200, "bytes": 800, "skipped": true }
+    ]
+  }
+}
