@@ -9,10 +9,9 @@ If a field is missing, it is omitted. It is not filled in as `0`, not borrowed f
 This started from a healthcare wrapping problem: AI products need structured claims and notes, while the source of truth is often a clerk portal that only speaks HTML. LinkedIn is the same shape of problem on a public site. The extra connector in this repo is a toy payer portal we own, so the idea can be demoed without anyone else's session.
 
 **Site:** [swaggyxo.github.io/overport](https://swaggyxo.github.io/overport/) (Try LinkedIn and Try a claim at the top)
-
 **Source:** [github.com/SwaggyXO/overport](https://github.com/SwaggyXO/overport)
 
-GitHub Pages is the writeup. The API is Cloud Run. Claims and notes are live on that URL. Profile fetches return 401 there because the container has no LinkedIn cookies. Run locally with a dummy session for a mapped 200.
+GitHub Pages is the writeup. Try a claim and a profile fetch from there. Hosted profile calls return 401 because that container has no LinkedIn cookies. Run locally with a dummy session for a mapped 200.
 
 ## The idea
 
