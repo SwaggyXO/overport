@@ -88,12 +88,12 @@ The public deploy does not attach a LinkedIn session. Profile routes return 401 
 
 The portal is supposed to look like an internal clerk screen. Default fonts, gray background, a table, a form. The JSON on the other side is the product.
 
-| Upstream (HTML) | Customer (JSON) |
+| Upstream (HTML) | What you call |
 | --- | --- |
 | ![Portal login](docs/assets/portal-login.png) | ![OpenAPI](docs/assets/openapi.png) |
-| ![Paid claim table](docs/assets/portal-claim-paid.png) | ![Paid claim JSON](docs/assets/api-claim-paid.png) |
-| ![Pending claim, no billed row](docs/assets/portal-claim-pending.png) | ![Pending JSON with billed_cents_missing](docs/assets/api-claim-pending.png) |
-| ![Notes form](docs/assets/portal-notes.png) | OpenAPI also lists `POST /v1/notes` |
+| ![Paid claim table](docs/assets/portal-claim-paid.png) | `GET /v1/claims/CLM-1001` below |
+| ![Pending claim, no billed row](docs/assets/portal-claim-pending.png) | `GET /v1/claims/CLM-1002` below |
+| ![Notes form](docs/assets/portal-notes.png) | `POST /v1/notes` |
 
 Login is a form. CLM-1001 has Billed `1250.00`. CLM-1002 has no Billed row at all. The JSON for 1002 is `billed_cents: null`, not `0`.
 

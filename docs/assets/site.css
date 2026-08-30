@@ -88,6 +88,8 @@ figure img {
   border: 1px solid var(--line);
 }
 
+figure pre.code { margin: 0; }
+
 figcaption { font-size: 0.95rem; margin-top: 0.5rem; }
 
 .shots figure { margin-bottom: 1.75rem; }

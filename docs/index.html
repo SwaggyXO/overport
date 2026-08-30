@@ -138,11 +138,39 @@
           <figcaption>OpenAPI at <code>/docs</code>. The HTML portal routes are listed so the wrap is obvious.</figcaption>
         </figure>
         <figure>
-          <img src="assets/api-claim-paid.png" alt="JSON response for paid claim CLM-1001" />
+          <pre class="code">{
+  "schema_version": "1.0",
+  "claim_id": "CLM-1001",
+  "status": "Paid",
+  "billed_cents": 125000,
+  "patient_initials": "J.D.",
+  "as_of": "2026-01-15",
+  "warnings": [],
+  "meta": {
+    "hops": [
+      { "name": "login", "method": "POST", "status": 200, "bytes": 150, "skipped": false },
+      { "name": "claim_status", "method": "GET", "status": 200, "bytes": 363, "skipped": false }
+    ]
+  }
+}</pre>
           <figcaption>Paid claim as JSON. billed_cents is 125000. Login and claim_status hops are in meta.</figcaption>
         </figure>
         <figure>
-          <img src="assets/api-claim-pending.png" alt="JSON response for pending claim with billed_cents null and a warning" />
+          <pre class="code">{
+  "schema_version": "1.0",
+  "claim_id": "CLM-1002",
+  "status": "Pending",
+  "billed_cents": null,
+  "patient_initials": "J.D.",
+  "as_of": "2026-02-01",
+  "warnings": ["billed_cents_missing"],
+  "meta": {
+    "hops": [
+      { "name": "login", "method": "POST", "status": 200, "bytes": 150, "skipped": false },
+      { "name": "claim_status", "method": "GET", "status": 200, "bytes": 326, "skipped": false }
+    ]
+  }
+}</pre>
           <figcaption>Pending claim. billed_cents is null. warnings includes billed_cents_missing.</figcaption>
         </figure>
       </div>
