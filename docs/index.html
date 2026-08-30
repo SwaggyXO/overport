@@ -13,9 +13,9 @@
       <a href="#pipeline">How we built it</a>
       <a href="#try-linkedin">Try LinkedIn</a>
       <a href="#try">Try a claim</a>
-      <a id="nav-docs" href="/docs">OpenAPI</a>
-      <a id="nav-portal" href="/legacy/login">HTML portal</a>
-      <a id="nav-health" href="/health">Health</a>
+      <a id="nav-docs" href="#">OpenAPI</a>
+      <a id="nav-portal" href="#">HTML portal</a>
+      <a id="nav-health" href="#">Health</a>
       <a href="https://github.com/SwaggyXO/overport">Source</a>
     </div>
   </nav>
@@ -33,18 +33,18 @@
       <a href="#pipeline">Dummy browser to OpenAPI</a>
       <a href="#try-linkedin">Try a profile fetch</a>
       <a href="#try">Try a claim</a>
-      <a id="live-api-link" href="/docs">OpenAPI on the live API</a>
+      <a id="live-api-link" href="#">OpenAPI</a>
     </p>
   </header>
 
   <main>
     <section id="pipeline">
-      <h2>How the LinkedIn API was found</h2>
+      <h2>How these APIs were found</h2>
       <p>
         LinkedIn does not hand you profile JSON. The live <code>/v1/profiles</code> route, and the
-        OpenAPI page that documents it, came from a local lab: a dummy account in an isolated
-        Chromium profile, HAR captures of the logged-in Network tab, session cookies kept on disk
-        only, then a browserless replay of the hops that actually carried profile data.
+        OpenAPI that documents it, came from a local lab: a dummy account in an isolated
+        Chromium profile, HAR captures of the logged-in Network tab, session cookies kept on
+        disk only, then a browserless replay of the hops that actually carried profile data.
       </p>
       <figure>
         <img src="assets/pipeline.svg" alt="Dummy Chromium, to HAR and cookies, to reverse-engineered hops, to httpx replay, to OpenAPI" />
@@ -53,7 +53,7 @@
       <ol>
         <li>
           <strong>Isolated Chromium.</strong> A throwaway browser profile, dummy LinkedIn account
-          only. Not a personal login. Not Playwright in this repo: DevTools on that Chromium window.
+          only. Not a personal login. DevTools on that Chromium window, not a browser in production.
         </li>
         <li>
           <strong>HAR with content.</strong> Fetch/XHR while opening a profile. That file showed
@@ -62,7 +62,7 @@
         </li>
         <li>
           <strong>Cookies, locally.</strong> <code>li_at</code> and <code>JSESSIONID</code> from that
-          session went into a local env file. They were never committed. The public Cloud Run
+          session stayed in a local env file. They were never committed. The public hosted
           service does not have them, which is why hosted profile calls return 401.
         </li>
         <li>
@@ -77,10 +77,10 @@
         </li>
       </ol>
       <p>
-        HAR files and the Chromium profile directory stay on the machine that captured them.
-        What shipped is the hop list, the mapper, the tests against synthetic RSC, and the
-        <a id="docs-from-pipeline" href="/docs">OpenAPI</a>
-        that Tross can click.
+        HAR files and the Chromium profile stay on the machine that captured them. What shipped is
+        the hop list, the mapper, tests against synthetic RSC, and the
+        <a id="docs-from-pipeline" href="#">OpenAPI</a>
+        on the live API.
       </p>
 
       <h3>Artifacts from that lab</h3>
@@ -115,16 +115,10 @@
       <h2>Try LinkedIn</h2>
       <p>
         This is the assigned problem: a profile URL in, versioned JSON out, no browser in production.
-        Eight hops (two GETs plus six card POSTs), 2.5 seconds apart, mapper that keeps About prose and
-        drops Featured posts, On-site, skill chips, and RSC leftovers into <code>warnings</code>.
-      </p>
-      <p>
-        Hit the live service from this page. The public container does not hold LinkedIn cookies, so
-        you should see <code>401 linkedin_not_configured</code>. That is the honest hosted result.
-        A mapped profile (from the offline fixtures) is under the buttons so you can see the schema.
-        For a live 200, run the API locally with a dummy-account session and call the same route,
-        or use Try it out on
-        <a id="docs-profiles" href="/docs#/profiles/get_profile_v1_profiles_get">OpenAPI /v1/profiles</a>.
+        Eight hops, 2.5 seconds apart. The public container has no LinkedIn session, so the live call
+        returns <code>401 linkedin_not_configured</code>. That is the honest hosted result. Use
+        <a id="docs-profiles" href="#">Try it out on OpenAPI</a> for the same
+        route. A 200 needs the service run locally with a dummy-account session.
       </p>
       <label for="vanity">Vanity name or /in/ URL</label>
       <input id="vanity" type="text" value="jane-doe" autocomplete="off" />
@@ -133,16 +127,15 @@
         <button type="button" id="btn-profile-sample" class="secondary">Show mapped sample</button>
       </p>
       <p class="status-line" id="status-profile"></p>
-      <pre id="out-profile">Click GET /v1/profiles to call the live API.</pre>
+      <pre id="out-profile">Click GET /v1/profiles. This hits the live API, not a sample file.</pre>
     </section>
 
     <section id="try">
       <h2>Try a claim</h2>
       <p>
-        Same wrapping job on a toy HTML portal we own, so this path is live without anyone else's
-        session. These buttons call Cloud Run, not the checked-in samples.
-        Clerk login is <code>clerk</code> / <code>clerk</code> if you open the
-        <a id="portal-link" href="/legacy/login">ugly HTML portal</a> yourself.
+        Same wrapping job on a toy HTML portal this process owns, so this path is live without anyone
+        else's session. Clerk login is <code>clerk</code> / <code>clerk</code> on
+        <a id="portal-link" href="#">/legacy/login</a>.
       </p>
       <p class="row">
         <button type="button" id="btn-1001">GET CLM-1001</button>

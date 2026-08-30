@@ -40,11 +40,11 @@
     const out = document.getElementById(outId);
     if (!button) return;
     button.onclick = async function () {
-      status.textContent = "Calling " + root + " ...";
+      status.textContent = "Calling the live API...";
       out.textContent = "Loading...";
       try {
         const result = await runner();
-        status.textContent = "HTTP " + result.status + " from " + root;
+        status.textContent = "HTTP " + result.status + " from the live API";
         out.textContent = result.body;
       } catch (err) {
         status.textContent = "Request failed";
