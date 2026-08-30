@@ -1,0 +1,1 @@
+"""Toy HTML portal package."""
