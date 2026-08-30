@@ -1,0 +1,51 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "overport"
+version = "0.1.0"
+description = "Stable JSON APIs in front of websites that only speak HTML."
+readme = "README.md"
+requires-python = ">=3.11"
+license = { text = "MIT" }
+authors = [{ name = "Devashish" }]
+dependencies = [
+    "fastapi>=0.115.0,<0.142",
+    "uvicorn[standard]>=0.30",
+    "httpx>=0.27.2,<0.28",
+    "pydantic-settings>=2.0",
+    "python-dotenv>=1.0",
+    "python-multipart>=0.0.9",
+]
+
+[project.optional-dependencies]
+dev = [
+    "pytest>=8,<9",
+    "pytest-asyncio>=0.24",
+    "ruff>=0.12",
+]
+
+[project.urls]
+Homepage = "https://swaggyxo.github.io/overport/"
+Repository = "https://github.com/SwaggyXO/overport"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["app*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 120
+target-version = "py311"
+src = ["app", "tests"]
+
+[tool.ruff.lint]
+select = ["E", "F", "I", "UP", "B"]
+ignore = ["B008"]
+
+[tool.ruff.format]
+quote-style = "double"

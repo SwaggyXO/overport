@@ -1,0 +1,36 @@
+# Local env and virtualenvs
+.env
+.env.*
+!.env.example
+.venv/
+venv/
+__pycache__/
+*.py[cod]
+*$py.class
+*.egg-info/
+dist/
+build/
+.pytest_cache/
+.mypy_cache/
+.ruff_cache/
+.coverage
+htmlcov/
+
+# uv
+.uv/
+
+# Editor
+.idea/
+.vscode/
+*.swp
+
+# Capture lab: browser profile, HAR files, cookie dumps
+.chrome-linkedin-dummy/
+captures/
+*.har
+scripts/
+
+# OS
+.DS_Store
+Thumbs.db
+_tmp*
