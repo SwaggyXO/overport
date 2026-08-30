@@ -393,8 +393,7 @@ def test_mapper_rejects_featured_winter_solstice_title_as_about() -> None:
 def test_mapper_extracts_nested_react_about_bio() -> None:
     vanity = "jordan-hale"
     opener = (
-        "I'm a Software Engineer, Full-Stack and SaaS Builder, and Career Mentor "
-        "focused on production-ready software."
+        "I'm a Software Engineer, Full-Stack and SaaS Builder, and Career Mentor focused on production-ready software."
     )
     paragraph = (
         "I work across frontend, backend, APIs, databases, architecture, and deployment "
